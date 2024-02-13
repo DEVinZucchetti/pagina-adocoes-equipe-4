@@ -3,9 +3,7 @@
     <h1>Adote um amigo!</h1>
 
     <div class="filters">
-      <input type="text" v-model="searchSpecies" placeholder="Espécie">
       <input type="number" v-model="searchAge" placeholder="Idade">
-      <input type="text" v-model="searchGender" placeholder="Gênero">
       <input type="text" v-model="searchName" placeholder="Nome">
     </div>
 
@@ -40,12 +38,6 @@ export default {
       }
       if (this.searchAge !== null) {
         filtered = filtered.filter(pet => pet.age === this.searchAge);
-      }
-      if (this.searchGender) {
-        filtered = filtered.filter(pet => pet.gender.toLowerCase().includes(this.searchGender.toLowerCase()));
-      }
-      if (this.searchName) {
-        filtered = filtered.filter(pet => pet.pet_name.toLowerCase().includes(this.searchName.toLowerCase()));
       }
       return filtered;
     }
