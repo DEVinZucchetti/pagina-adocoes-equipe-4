@@ -9,7 +9,7 @@
       <li>Porte: {{ pet.size }}</li>
     </ul>
 
-    <img :src="pet.image" :alt="pet.pet_name" class="pet-image" />
+    <img src="https://i.imgflip.com/5y7m17.png" :alt="pet.pet_name" class="pet-image" />
 
     <form class="form" @submit.prevent="handleSubmit">
       <h2 class="form-title">Poucos passos para adotar {{ pet.name }}</h2>

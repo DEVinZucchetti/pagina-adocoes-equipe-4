@@ -1,10 +1,19 @@
 <template>
   <div class="container">
     <h1>Adote um amigo!</h1>
+
+    <div class="filters">
+      <input type="text" v-model="searchSpecies" placeholder="Espécie">
+      <input type="number" v-model="searchAge" placeholder="Idade">
+      <input type="text" v-model="searchGender" placeholder="Gênero">
+      <input type="text" v-model="searchName" placeholder="Nome">
+    </div>
+
     <div class="pet-list">
-      <div class="pet-item" v-for="pet in pets" :key="pet.id" @click="redirectToProfile(pet.id)" data-test="item-pet">
+      <div class="pet-item" v-for="pet in filteredPets" :key="pet.id" @click="redirectToProfile(pet.id)" data-test="item-pet">
         <img src="https://i.imgflip.com/5y7m17.png" :alt="pet.pet_name" class="pet-image" />
         <span class="pet-name">{{ pet.pet_name }}</span>
+        <span class="pet-age"> Idade: {{ pet.age }} Anos</span>
       </div>
     </div>
   </div>
@@ -16,20 +25,45 @@ import PetService from '@/services/PetService'
 export default {
   data() {
     return {
-      pets: []
+      pets: [],
+      searchSpecies: '',
+      searchAge: null,
+      searchGender: '',
+      searchName: ''
+    }
+  },
+  computed: {
+    filteredPets() {
+      let filtered = this.pets;
+      if (this.searchSpecies) {
+        filtered = filtered.filter(pet => pet.specie.name.toLowerCase().includes(this.searchSpecies.toLowerCase()));
+      }
+      if (this.searchAge !== null) {
+        filtered = filtered.filter(pet => pet.age === this.searchAge);
+      }
+      if (this.searchGender) {
+        filtered = filtered.filter(pet => pet.gender.toLowerCase().includes(this.searchGender.toLowerCase()));
+      }
+      if (this.searchName) {
+        filtered = filtered.filter(pet => pet.pet_name.toLowerCase().includes(this.searchName.toLowerCase()));
+      }
+      return filtered;
     }
   },
   methods: {
     redirectToProfile(petId) {
       this.$router.push(`/pets-adocao/${petId}/perfil`)
+    },
+    getAllPets() {
+      PetService.getAllPets()
+        .then((data) => {
+          this.pets = data;
+        })
+        .catch(() => alert('Houve um erro. Entre em contato com a ONG'));
     }
   },
   mounted() {
-    PetService.getAllPets()
-      .then((data) => {
-        this.pets = data
-      })
-      .catch(() => alert('Houve um erro. Entre em contato com a ONG'))
+    this.getAllPets();
   }
 }
 </script>
@@ -40,6 +74,17 @@ export default {
   margin: 0 auto;
 }
 
+.filters {
+  margin-bottom: 20px;
+}
+
+.filters input {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
 .pet-list {
   display: flex;
   flex-wrap: wrap;
@@ -48,6 +93,8 @@ export default {
 }
 
 .pet-item {
+  display: flex;
+  flex-direction: column;
   width: 250px;
   padding: 10px;
   border-radius: 12px;
@@ -67,6 +114,14 @@ export default {
 }
 
 .pet-name {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  margin-top: 10px;
+}
+
+.pet-age {
   font-size: 18px;
   font-weight: bold;
   text-align: center;
