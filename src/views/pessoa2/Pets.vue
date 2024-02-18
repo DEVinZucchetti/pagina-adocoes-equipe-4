@@ -12,6 +12,7 @@
           variant="outlined" 
           rounded="xl"
           prepend-inner-icon="mdi-magnify"
+          data-test="input-name"
         ></v-text-field>
         <v-text-field
           label="Idade"
@@ -55,12 +56,13 @@
     <div class="card-container">
       <v-card
         v-for="pet in filteredPets" 
-        :key="pet.id" 
+        :key="pet.id"
         rounded="xl" 
         class="ma-6"
         @mouseover="handleMouseOver"
         @mouseout="handleMouseOut"
         @click="redirectToProfile(pet.id)"
+        data-test="item-pet"
         :class="{ 'card-hover': isHovered }"
       >
         <v-img
@@ -99,7 +101,7 @@
 
 <script>
   import Menu from '../pessoa2/Menu.vue'
-  import axios from 'axios'
+  import PetService from './services/PetService'
   
  export default {
   data() {
@@ -129,12 +131,12 @@
     }
   },
   mounted() {
-    axios.get('http://localhost:3000/pets')
-      .then((response) => {
-        this.pets = response.data
+    PetService.getAllPets()
+      .then((data) => {
+        this.pets = data
       })
       .catch(() => {
-        alert('Desculpe, não foi possivel carregar os produtos! Por favor, tente novamente')
+        alert('Desculpe, não foi possivel carregar os bichinhos! Por favor, tente novamente')
       })
   },
   components: {
