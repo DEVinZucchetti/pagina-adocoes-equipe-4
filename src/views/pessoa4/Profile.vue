@@ -12,28 +12,28 @@
       <p>Poucos passos para adotar {{ pet.name }}</p>
       <div class="input-form">
         <label>Nome</label>
-        <input v-model="name" />
+        <input v-model="name" data-test="input-name"/>
       </div>
-     <div class="input-form">
+      <div class="input-form">
         <label>Contato</label>
-        <input v-model="contact" />
+        <input v-model="contact" data-test="input-contact" />
       </div>
-       <div class="input-form">
+      <div class="input-form">
         <label>Email</label>
-        <input v-model="email" type="email" />
+        <input v-model="email" type="email" data-test="input-email"/>
       </div>
       <div class="input-form">
         <label>Fale um pouco sobre a sua motivação de adotar esse pet:</label>
-        <textarea v-model="observations" />
+        <textarea v-model="observations" data-test="textarea-observations" />
       </div>
-      <button type="submit">Cadastrar</button>
+      <button type="submit" data-test="submit-button">Cadastrar</button>
     </form>
   </div>
 </template>
 
 
 <script>
-import axios from 'axios'
+import PetService from '@/services/PetService'
 
 export default {
   data() {
@@ -46,26 +46,27 @@ export default {
     }
   },
   methods: {
-    handleSubmit(){
-        axios.post("http://127.0.0.1:8000/api/adocoes", {
-            name: this.name,
-            email: this.email,
-            contact: this.contact,
-            observations: this.observations,
-        })
+    handleSubmit() {
+      PetService.adoptPet({
+        name: this.name,
+        email: this.email,
+        contact: this.contact,
+        observations: this.observations,
+      })
         .then(() => {
-            alert("Cadastrado com sucesso")
+          alert("Cadastrado com sucesso")
         })
         .catch(() => {
-            alert("Erro ao tentar realizar a adocao")
+          alert("Erro ao tentar realizar a adocao")
         })
     }
   },
   mounted() {
-    const id = this.$route.params.id
-    axios.get(`http://127.0.0.1:8000/api/pets/${id}`).then((response) => {
-      this.pet = response.data
-    })
+    const id = this.$route.params.id //pegando o id da URL
+    PetService.getOnePet(id)
+      .then((data) => {
+        this.pet = data
+      })
   }
 }
 </script>
@@ -82,8 +83,8 @@ export default {
 }
 
 .input-form {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 </style>
