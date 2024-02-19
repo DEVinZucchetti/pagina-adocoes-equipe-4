@@ -9,13 +9,14 @@
               <img class="logo-image" src="../pessoa2/images/Logotipo.jpeg" :width="260"/>
             </router-link>
           </v-toolbar-title>
-          <router-link to="lista-de-adocoes">
+          <router-link to="lista-de-adocoes" data-test="menu-button">
             <v-btn 
               class="menu-button text-uppercase font-weight-bold text-brown-darken-3 xs-" 
               variant="flat" 
               color="orange-darken-1" 
               rounded="xl" 
               size="large"
+              @click="redirectToProfile()"
             >
               Quero adotar
             </v-btn>

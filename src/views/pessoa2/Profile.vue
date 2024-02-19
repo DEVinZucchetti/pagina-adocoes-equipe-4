@@ -2,7 +2,7 @@
   <Menu />
   <div v-if="pet" class="container">
     <div class="title text-orange-darken-1 text-h5">
-      <h1> {{ pet.name }}</h1>
+      <h1 data-test="pet-name"> {{ pet.name }}</h1>
     </div>
     <v-divider></v-divider>
     <div class="main-container">
@@ -37,16 +37,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr data-test="pet-age">
               <td><strong>Idade:</strong> {{ pet.age }} {{ pet.age === 1 ? 'ano' : 'anos' }}</td>
             </tr>
-            <tr>
-              <td><strong>Gênero:</strong>{{ pet.gender === 'Female' ? 'Fêmea' : 'Macho' }}</td>
+            <tr data-test="pet-gender">
+              <td><strong>Gênero:</strong> {{ pet.gender === 'Female' ? 'Fêmea' : 'Macho' }}</td>
             </tr>
-            <tr>
+            <tr data-test="pet-size">
               <td><strong>Porte do animal:</strong> {{ this.translateSize(pet.size) }}</td>
             </tr>
-            <tr>
+            <tr data-test="pet-breed">
               <td><strong>Raça:</strong> {{ pet.breed }}</td>
             </tr>
           </tbody>
@@ -84,26 +84,36 @@
                       <v-text-field
                         class="mb-n5"
                         label="Nome completo"
-                        required
+                        type="text"
+                        v-model="name" 
+                        data-test="input-name"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         class="mb-n5"
                         label="Email"
-                        required
+                        type="text"
+                        v-model="email"
+                        data-test="input-email"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         class="mb-n5"
                         label="Telefone"
-                        required
+                        type="text"
+                        v-model="contact"
+                        data-test="input-contact"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <p>Conte-nos um pouco sobre você, sua casa e a rotina de sua família</p>
-                      <v-textarea></v-textarea>
+                      <v-textarea 
+                        v-model="observations"
+                        type="text"
+                        data-test="input-observations">
+                      </v-textarea>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -118,9 +128,11 @@
                   Fechar
                 </v-btn>
                 <v-btn
+                  type="submit"
                   color="orange-darken-1"
                   variant="text"
                   @click="dialog = false"
+                  data-test="submit-button"
                 >
                   Enviar
                 </v-btn>
@@ -135,7 +147,7 @@
 
 <script>
   import Menu from '../pessoa2/Menu.vue'
-  import axios from 'axios'
+  import PetService from './services/PetService'
 
   export default {
     data: () => ({
@@ -151,13 +163,15 @@
 
     mounted() {
       const id = this.$route.params.id
-      axios.get(`http://127.0.0.1:3000/pets/${id}`).then((response) => {
-        this.pet = response.data
+      PetService.getOnePet(id).then((data) => {
+        this.pet = data
       })
     },
+
     components: {
       Menu
     },
+
     methods: {
       translateSize(name) {
         const lowerCaseName = name.toLowerCase();

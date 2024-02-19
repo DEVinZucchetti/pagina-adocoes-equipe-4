@@ -12,7 +12,7 @@
           variant="outlined" 
           rounded="xl"
           prepend-inner-icon="mdi-magnify"
-          data-test="input-name"
+          data-test="search-input"
         ></v-text-field>
         <v-text-field
           label="Idade"
@@ -20,6 +20,7 @@
           v-model="age"
           variant="outlined" 
           rounded="xl"
+          data-test="search-input"
         ></v-text-field>
         <v-select
           label="Espécie" 
@@ -30,6 +31,7 @@
           rounded="xl"
           item-title="specie"
           :items="itemSpecies" 
+          data-test="search-input"
         />
         <v-select
           label="Gênero" 
@@ -40,6 +42,7 @@
           rounded="xl"
           item-title="gender"
           :items="itemGenders" 
+          data-test="search-input"
         />
         <v-select
           label="Tamanho" 
@@ -50,6 +53,7 @@
           rounded="xl"
           item-title="size"
           :items="itemSize" 
+          data-test="search-input"
         />
       </v-form>
     </div>
